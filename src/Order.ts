@@ -11,11 +11,13 @@ export default class Order {
         this.cpf = new Cpf(cpf)
         this.items = []
     }
-    addItem(description: string, price: number, quantity: number) {
-        this.items.push(new OrderItem(description, price, quantity))
+    addItem(id: string, price: number, quantity: number) {
+        this.items.push(new OrderItem(id, price, quantity))
     }
     addCoupon(coupon: Coupon ){
-        this.coupon = coupon;
+        if(!coupon.isExpired()) {
+            this.coupon = coupon;
+        }
     }
     getTotal() {
         let total = 0

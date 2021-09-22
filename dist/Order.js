@@ -10,11 +10,13 @@ class Order {
         this.cpf = new Cpf_1.default(cpf);
         this.items = [];
     }
-    addItem(description, price, quantity) {
-        this.items.push(new OrderItem_1.default(description, price, quantity));
+    addItem(id, price, quantity) {
+        this.items.push(new OrderItem_1.default(id, price, quantity));
     }
     addCoupon(coupon) {
-        this.coupon = coupon;
+        if (!coupon.isExpired()) {
+            this.coupon = coupon;
+        }
     }
     getTotal() {
         let total = 0;
