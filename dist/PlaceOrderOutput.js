@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class PlaceOrderOutput {
-    constructor({ total }) {
+    constructor({ freight, total }) {
+        this.freight = freight;
         this.total = total;
     }
 }

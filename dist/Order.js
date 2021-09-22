@@ -9,6 +9,7 @@ class Order {
     constructor(cpf) {
         this.cpf = new Cpf_1.default(cpf);
         this.items = [];
+        this.freight = 0;
     }
     addItem(id, price, quantity) {
         this.items.push(new OrderItem_1.default(id, price, quantity));
@@ -26,6 +27,7 @@ class Order {
         if (this.coupon) {
             total -= (total * this.coupon.percentage) / 100;
         }
+        total += this.freight;
         return total;
     }
 }
