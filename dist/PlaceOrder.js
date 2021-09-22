@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Coupon_1 = __importDefault(require("./Coupon"));
 const Order_1 = __importDefault(require("./Order"));
+const PlaceOrderOutput_1 = __importDefault(require("./PlaceOrderOutput"));
 class PlaceOrder {
     constructor() {
         this.coupons = [
@@ -24,9 +25,9 @@ class PlaceOrder {
         }
         const total = order.getTotal();
         this.orders.push(order);
-        return {
+        return new PlaceOrderOutput_1.default({
             total
-        };
+        });
     }
 }
 exports.default = PlaceOrder;

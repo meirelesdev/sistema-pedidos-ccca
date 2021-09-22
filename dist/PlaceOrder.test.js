@@ -4,8 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const PlaceOrder_1 = __importDefault(require("./PlaceOrder"));
+const PlaceOrderInput_1 = __importDefault(require("./PlaceOrderInput"));
 test("Deve fazer um pedido", function () {
-    const input = {
+    const input = new PlaceOrderInput_1.default({
         cpf: "987.599.380-80",
         items: [
             { description: "Guitarra", price: 1000, quantity: 2 },
@@ -13,7 +14,7 @@ test("Deve fazer um pedido", function () {
             { description: "Cabo", price: 30, quantity: 3 }
         ],
         coupon: "VALE20"
-    };
+    });
     const placeOrder = new PlaceOrder_1.default();
     const output = placeOrder.execute(input);
     expect(output.total).toBe(5672);
