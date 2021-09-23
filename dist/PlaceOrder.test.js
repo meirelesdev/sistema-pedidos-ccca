@@ -3,6 +3,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const CouponRepositoryMemory_1 = __importDefault(require("./CouponRepositoryMemory"));
+const ItemRepositoryMemory_1 = __importDefault(require("./ItemRepositoryMemory"));
+const OrderRepositoryMemory_1 = __importDefault(require("./OrderRepositoryMemory"));
 const PlaceOrder_1 = __importDefault(require("./PlaceOrder"));
 const PlaceOrderInput_1 = __importDefault(require("./PlaceOrderInput"));
 test("Deve fazer um pedido", function () {
@@ -16,7 +19,10 @@ test("Deve fazer um pedido", function () {
         ],
         coupon: "VALE20"
     });
-    const placeOrder = new PlaceOrder_1.default();
+    const itemRepository = new ItemRepositoryMemory_1.default();
+    const couponRepository = new CouponRepositoryMemory_1.default();
+    const orderRepository = new OrderRepositoryMemory_1.default();
+    const placeOrder = new PlaceOrder_1.default(itemRepository, couponRepository, orderRepository);
     const output = placeOrder.execute(input);
     expect(output.total).toBe(5982);
 });
@@ -31,7 +37,10 @@ test("Deve fazer um pedido com cupom de desconto expirado", function () {
         ],
         coupon: "VALE20_EXPIRED"
     });
-    const placeOrder = new PlaceOrder_1.default();
+    const itemRepository = new ItemRepositoryMemory_1.default();
+    const couponRepository = new CouponRepositoryMemory_1.default();
+    const orderRepository = new OrderRepositoryMemory_1.default();
+    const placeOrder = new PlaceOrder_1.default(itemRepository, couponRepository, orderRepository);
     const output = placeOrder.execute(input);
     expect(output.total).toBe(7400);
 });
@@ -46,7 +55,10 @@ test("Deve fazer um pedido com calculo de frete", function () {
         ],
         coupon: "VALE20_EXPIRED"
     });
-    const placeOrder = new PlaceOrder_1.default();
+    const itemRepository = new ItemRepositoryMemory_1.default();
+    const couponRepository = new CouponRepositoryMemory_1.default();
+    const orderRepository = new OrderRepositoryMemory_1.default();
+    const placeOrder = new PlaceOrder_1.default(itemRepository, couponRepository, orderRepository);
     const output = placeOrder.execute(input);
     expect(output.freight).toBe(310);
 });
