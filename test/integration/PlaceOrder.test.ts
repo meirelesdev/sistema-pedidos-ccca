@@ -1,9 +1,10 @@
-import CouponRepositoryMemory from "../../src/CouponRepositoryMemory"
-import ItemRepositoryMemory from "../../src/ItemRepositoryMemory"
-import OrderRepositoryMemory from "../../src/OrderRepositoryMemory"
-import PlaceOrder from "../../src/PlaceOrder"
-import PlaceOrderInput from "../../src/PlaceOrderInput"
-import ZipcodeCalculatorAPIMemory from "../../src/ZipcodeCalculatorAPIMemory"
+import CouponRepositoryMemory from "../../src/infra/repository/memory/CouponRepositoryMemory"
+import OrderRepositoryMemory from "../../src/infra/repository/memory/OrderRepositoryMemory"
+import PlaceOrder from "../../src/application/PlaceOrder"
+import PlaceOrderInput from "../../src/application/PlaceOrderInput"
+import ItemRepositoryMemory from "../../src/infra/repository/memory/ItemRepositoryMemory"
+import ZipcodeCalculatorAPIMemory from "../../src/infra/gateway/memory/ZipcodeCalculatorAPIMemory"
+
 
 test("Deve fazer um pedido", function(){
     const input = new PlaceOrderInput({

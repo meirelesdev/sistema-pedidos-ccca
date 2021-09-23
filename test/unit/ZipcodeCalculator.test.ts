@@ -1,4 +1,4 @@
-import ZipcodeCalculatorAPIMemory from "../../src/ZipcodeCalculatorAPIMemory"
+import ZipcodeCalculatorAPIMemory from "../../src/infra/gateway/memory/ZipcodeCalculatorAPIMemory"
 
 test("Deve calcular a distância entre dois ceps", function(){
     const zipcodeCalculator = new ZipcodeCalculatorAPIMemory()
