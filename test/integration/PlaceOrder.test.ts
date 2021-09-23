@@ -6,7 +6,7 @@ import ItemRepositoryMemory from "../../src/infra/repository/memory/ItemReposito
 import ZipcodeCalculatorAPIMemory from "../../src/infra/gateway/memory/ZipcodeCalculatorAPIMemory"
 
 
-test("Deve fazer um pedido", function(){
+test("Deve fazer um pedido", async function(){
     const input = new PlaceOrderInput({
         cpf:"987.599.380-80",
         zipcode: "11.111-11",
@@ -22,10 +22,10 @@ test("Deve fazer um pedido", function(){
     const orderRepository = new OrderRepositoryMemory()
     const zipcodeCalculator = new ZipcodeCalculatorAPIMemory()
     const placeOrder = new PlaceOrder(itemRepository, couponRepository, orderRepository, zipcodeCalculator)
-    const output = placeOrder.execute(input)
+    const output = await placeOrder.execute(input)
     expect(output.total).toBe(5982)
 })
-test("Deve fazer um pedido com cupom de desconto expirado", function(){
+test("Deve fazer um pedido com cupom de desconto expirado", async function(){
     const input = new PlaceOrderInput({
         cpf:"987.599.380-80",
         zipcode: "11.111-11",
@@ -41,10 +41,10 @@ test("Deve fazer um pedido com cupom de desconto expirado", function(){
     const orderRepository = new OrderRepositoryMemory()
     const zipcodeCalculator = new ZipcodeCalculatorAPIMemory()
     const placeOrder = new PlaceOrder(itemRepository, couponRepository, orderRepository, zipcodeCalculator)
-    const output = placeOrder.execute(input)
+    const output = await placeOrder.execute(input)
     expect(output.total).toBe(7400)
 })
-test("Deve fazer um pedido com calculo de frete", function(){
+test("Deve fazer um pedido com calculo de frete", async function(){
     const input = new PlaceOrderInput({
         cpf:"987.599.380-80",
         zipcode: "11.111-11",
@@ -60,6 +60,6 @@ test("Deve fazer um pedido com calculo de frete", function(){
     const orderRepository = new OrderRepositoryMemory()
     const zipcodeCalculator = new ZipcodeCalculatorAPIMemory()
     const placeOrder = new PlaceOrder(itemRepository, couponRepository, orderRepository, zipcodeCalculator)
-    const output = placeOrder.execute(input)
+    const output = await placeOrder.execute(input)
     expect(output.freight).toBe(310)
 })

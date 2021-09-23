@@ -1,9 +1,17 @@
 import Item from "../../../domain/entity/Item";
 import ItemRepository from "../../../domain/repository/ItemRepository";
+import Database from "../../database/Database";
 
 export default class ItemRepositoryDatabase implements ItemRepository {
-    getById(id: string): Item | undefined {
-        throw new Error("Method not implemented.");
+    database: Database;
+
+    constructor(database: Database) {
+        this.database = database
+    }
+
+    async getById(id: string): Promise<Item | undefined> {
+        const itemData = await this.database.one("SELECT * FROM item where id = $1", [id])
+        return new Item(itemData.id, itemData.description, itemData.price, itemData.width, itemData.height, itemData.length, itemData.weight)
     }
 
 }
