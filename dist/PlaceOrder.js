@@ -6,13 +6,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const FreightCalculator_1 = __importDefault(require("./FreightCalculator"));
 const Order_1 = __importDefault(require("./Order"));
 const PlaceOrderOutput_1 = __importDefault(require("./PlaceOrderOutput"));
-const ZipcodeCalculatorAPIMemory_1 = __importDefault(require("./ZipcodeCalculatorAPIMemory"));
 class PlaceOrder {
-    constructor(itemRepository, couponRepository, orderRepository) {
+    constructor(itemRepository, couponRepository, orderRepository, zipcodeCalculator) {
         this.itemRepository = itemRepository;
         this.coupomRepository = couponRepository;
         this.orderRepository = orderRepository;
-        this.zipcodeCalculator = new ZipcodeCalculatorAPIMemory_1.default();
+        this.zipcodeCalculator = zipcodeCalculator;
     }
     execute(input) {
         const order = new Order_1.default(input.cpf);
