@@ -1,12 +1,12 @@
-import FreightCalculator from "../domain/service/FreightCalculator"
-import ItemRepository from "../domain/repository/ItemRepository"
-import Order from "../domain/entity/Order"
-import PlaceOrderInput from "./PlaceOrderInput"
-import PlaceOrderOutput from "./PlaceOrderOutput"
-import ZipcodeCalculatorAPI from "../domain/gateway/ZipcodeCalculatorAPI"
-import OrderRepository from "../domain/repository/OrderRepository"
-import CouponRepository from "../domain/repository/CouponRepository"
-import ZipcodeCalculatorAPIMemory from "../infra/gateway/memory/ZipcodeCalculatorAPIMemory"
+import FreightCalculator from "../../domain/service/FreightCalculator"
+import ItemRepository from "../../domain/repository/ItemRepository"
+import Order from "../../domain/entity/Order"
+import ZipcodeCalculatorAPI from "../../domain/gateway/ZipcodeCalculatorAPI"
+import OrderRepository from "../../domain/repository/OrderRepository"
+import CouponRepository from "../../domain/repository/CouponRepository"
+import ZipcodeCalculatorAPIMemory from "../../infra/gateway/memory/ZipcodeCalculatorAPIMemory"
+import PlaceOrderInput from "../DTOs/PlaceOrderInput"
+import PlaceOrderOutput from "../DTOs/PlaceOrderOutput"
 
 export default class PlaceOrder {
     zipcodeCalculator: ZipcodeCalculatorAPIMemory
@@ -22,7 +22,8 @@ export default class PlaceOrder {
     }
 
     async execute(input: PlaceOrderInput): Promise<PlaceOrderOutput> {
-        const order = new Order(input.cpf)
+        const sequence = this.orderRepository.count() + 1
+        const order = new Order(input.cpf, input.issueDate, sequence)
         const distance = this.zipcodeCalculator.calculate(input.zipcode, "99.999-999");
         for(const orderItem of input.items) {
             const item = await this.itemRepository.getById(orderItem.id)
@@ -36,6 +37,7 @@ export default class PlaceOrder {
         }
         this.orderRepository.save(order)
         return new PlaceOrderOutput({
+                code: order.code.value,
                 freight: order.freight,
                 total: order.getTotal()
         })
