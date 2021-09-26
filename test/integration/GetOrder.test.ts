@@ -2,10 +2,12 @@
 import PlaceOrderInput from "../../src/application/DTOs/PlaceOrderInput"
 import GetOrder from "../../src/application/usecases/GetOrder"
 import PlaceOrder from "../../src/application/usecases/PlaceOrder"
+import PgPromiseDatabase from "../../src/infra/database/PgPromiseDatabase"
 import ZipcodeCalculatorAPIMemory from "../../src/infra/gateway/memory/ZipcodeCalculatorAPIMemory"
+import CouponRepositoryDatabase from "../../src/infra/repository/database/CouponRepositoryDatabase"
+import ItemRepositoryDatabase from "../../src/infra/repository/database/ItemRepositoryDatabase"
+import OrderRepositoryDatabase from "../../src/infra/repository/database/OrderRepositoryDatabase"
 import CouponRepositoryMemory from "../../src/infra/repository/memory/CouponRepositoryMemory"
-import ItemRepositoryMemory from "../../src/infra/repository/memory/ItemRepositoryMemory"
-import OrderRepositoryMemory from "../../src/infra/repository/memory/OrderRepositoryMemory"
 
 test("Deve consultar um pedido", async function () {
     const input = new PlaceOrderInput({
@@ -19,9 +21,10 @@ test("Deve consultar um pedido", async function () {
         issueDate: new Date("2020-10-10"),
         coupon: "VALE20"
     })
-    const itemRepository = new ItemRepositoryMemory()
-    const couponRepository = new CouponRepositoryMemory()
-    const orderRepository = new OrderRepositoryMemory()
+    const itemRepository = new ItemRepositoryDatabase(PgPromiseDatabase.getInstance())
+    const couponRepository = new CouponRepositoryDatabase(PgPromiseDatabase.getInstance())
+    const orderRepository = new OrderRepositoryDatabase(PgPromiseDatabase.getInstance())
+    await orderRepository.clean()
     const zipcodeCalculator = new ZipcodeCalculatorAPIMemory()
     const placeOrder = new PlaceOrder(itemRepository, couponRepository, orderRepository, zipcodeCalculator)
     const output = await placeOrder.execute(input)

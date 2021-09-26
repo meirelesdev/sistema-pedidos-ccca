@@ -14,7 +14,7 @@ test("Deve calcular o frete do amplificador", function(){
     expect(price).toBe(220)
 })
 test("Deve calcular o frete do amplificador", function(){
-    const item = new Item("3", "cabo", 30, 9, 9, 9, 0.1)
+    const item = new Item("3", "cabo", 30, 10, 10, 10, 1)
     const distance = 1000
     const price = FreightCalculator.calculate(distance, item)
     expect(price).toBe(10)
