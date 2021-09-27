@@ -2,12 +2,10 @@
 import PlaceOrderInput from "../../src/application/DTOs/PlaceOrderInput"
 import GetOrder from "../../src/application/usecases/GetOrder"
 import PlaceOrder from "../../src/application/usecases/PlaceOrder"
-import PgPromiseDatabase from "../../src/infra/database/PgPromiseDatabase"
+import MemoryRepositoryFactory from "../../src/infra/factory/MemoryRepositoryFactory"
 import ZipcodeCalculatorAPIMemory from "../../src/infra/gateway/memory/ZipcodeCalculatorAPIMemory"
-import CouponRepositoryDatabase from "../../src/infra/repository/database/CouponRepositoryDatabase"
-import ItemRepositoryDatabase from "../../src/infra/repository/database/ItemRepositoryDatabase"
-import OrderRepositoryDatabase from "../../src/infra/repository/database/OrderRepositoryDatabase"
-import CouponRepositoryMemory from "../../src/infra/repository/memory/CouponRepositoryMemory"
+import OrderRepositoryMemory from "../../src/infra/repository/memory/OrderRepositoryMemory"
+
 
 test("Deve consultar um pedido", async function () {
     const input = new PlaceOrderInput({
@@ -21,15 +19,16 @@ test("Deve consultar um pedido", async function () {
         issueDate: new Date("2020-10-10"),
         coupon: "VALE20"
     })
-    const itemRepository = new ItemRepositoryDatabase(PgPromiseDatabase.getInstance())
-    const couponRepository = new CouponRepositoryDatabase(PgPromiseDatabase.getInstance())
-    const orderRepository = new OrderRepositoryDatabase(PgPromiseDatabase.getInstance())
+
+    const repositoryFactory = new MemoryRepositoryFactory()
+    const orderRepository = repositoryFactory.createOrderRepository()
+    // const orderRepository = OrderRepositoryMemory.getInstance()
     await orderRepository.clean()
     const zipcodeCalculator = new ZipcodeCalculatorAPIMemory()
-    const placeOrder = new PlaceOrder(itemRepository, couponRepository, orderRepository, zipcodeCalculator)
+    const placeOrder = new PlaceOrder(repositoryFactory, zipcodeCalculator)
     const output = await placeOrder.execute(input)
 
-    const getOrder = new GetOrder(itemRepository, couponRepository, orderRepository)
+    const getOrder = new GetOrder(repositoryFactory)
     const getOrderOutput = await getOrder.execute(output.code)
     expect(getOrderOutput.total).toBe(5982)
 })

@@ -3,6 +3,7 @@ import ItemRepository from "../../domain/repository/ItemRepository"
 import OrderRepository from "../../domain/repository/OrderRepository"
 import CouponRepository from "../../domain/repository/CouponRepository"
 import GetOrderOutput from "../DTOs/GetOrderOutput"
+import RepositoryFactory from "../../domain/factory/RepositoryFactory"
 
 
 export default class GetOrder {
@@ -10,10 +11,10 @@ export default class GetOrder {
     coupomRepository: CouponRepository
     orderRepository: OrderRepository
     
-    constructor(itemRepository: ItemRepository, couponRepository: CouponRepository, orderRepository: OrderRepository) {
-        this.itemRepository = itemRepository
-        this.coupomRepository = couponRepository
-        this.orderRepository = orderRepository
+    constructor(repositoryFactory: RepositoryFactory) {
+        this.itemRepository = repositoryFactory.createItemRepository()
+        this.coupomRepository = repositoryFactory.createCouponRepository()
+        this.orderRepository = repositoryFactory.createOrderRepository()
     }
 
     async execute(code: string): Promise<GetOrderOutput> {

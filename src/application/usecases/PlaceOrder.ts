@@ -7,6 +7,7 @@ import CouponRepository from "../../domain/repository/CouponRepository"
 import ZipcodeCalculatorAPIMemory from "../../infra/gateway/memory/ZipcodeCalculatorAPIMemory"
 import PlaceOrderInput from "../DTOs/PlaceOrderInput"
 import PlaceOrderOutput from "../DTOs/PlaceOrderOutput"
+import RepositoryFactory from "../../domain/factory/RepositoryFactory"
 
 export default class PlaceOrder {
     zipcodeCalculator: ZipcodeCalculatorAPIMemory
@@ -14,10 +15,10 @@ export default class PlaceOrder {
     coupomRepository: CouponRepository
     orderRepository: OrderRepository
     
-    constructor(itemRepository: ItemRepository, couponRepository: CouponRepository, orderRepository: OrderRepository, zipcodeCalculator: ZipcodeCalculatorAPI) {
-        this.itemRepository = itemRepository
-        this.coupomRepository = couponRepository
-        this.orderRepository = orderRepository
+    constructor(repositoryFactory: RepositoryFactory, zipcodeCalculator: ZipcodeCalculatorAPI) {
+        this.itemRepository = repositoryFactory.createItemRepository()
+        this.coupomRepository = repositoryFactory.createCouponRepository()
+        this.orderRepository = repositoryFactory.createOrderRepository()
         this.zipcodeCalculator = zipcodeCalculator
     }
 
