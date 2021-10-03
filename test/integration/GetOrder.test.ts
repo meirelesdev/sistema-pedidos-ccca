@@ -21,8 +21,8 @@ test("Deve consultar um pedido", async function () {
     })
 
     const repositoryFactory = new MemoryRepositoryFactory()
-    const orderRepository = repositoryFactory.createOrderRepository()
-    // const orderRepository = OrderRepositoryMemory.getInstance()
+    // const orderRepository = repositoryFactory.createOrderRepository()
+    const orderRepository = OrderRepositoryMemory.getInstance()
     await orderRepository.clean()
     const zipcodeCalculator = new ZipcodeCalculatorAPIMemory()
     const placeOrder = new PlaceOrder(repositoryFactory, zipcodeCalculator)
