@@ -7,4 +7,6 @@ test("Deve invocar a API /orders/${code}", async function(){
     })
     const order = response.data
     expect(order.code).toBe("202100000001")
+    expect(order.freight).toBe(310)
+    expect(order.total).toBe(5982)
 })

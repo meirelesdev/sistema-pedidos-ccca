@@ -4,9 +4,7 @@ import Hapi from '@hapi/hapi'
 export default class HapiHttp implements Http {
     server: Hapi.Server;
     constructor(){
-        this.server = Hapi.server({
-            port: 3001
-        })
+        this.server = Hapi.server({})
     }
     convertUrl(url: string){
         return url.replace(/\$/g, "")
@@ -22,6 +20,7 @@ export default class HapiHttp implements Http {
         })
     }
     async listen(port: number): Promise<void> {
-        return this.server.start()
+        this.server.settings.port = port
+        await this.server.start()
     }
 }
