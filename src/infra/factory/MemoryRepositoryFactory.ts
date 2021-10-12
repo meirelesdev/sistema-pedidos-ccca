@@ -2,7 +2,9 @@ import RepositoryFactory from "../../domain/factory/RepositoryFactory";
 import CouponRepository from "../../domain/repository/CouponRepository";
 import ItemRepository from "../../domain/repository/ItemRepository";
 import OrderRepository from "../../domain/repository/OrderRepository";
+import StockEntryRepository from "../../domain/repository/StockEntryRepository";
 import TaxTableRepository from "../../domain/repository/TaxTableRepository";
+import StockEntryRepositoryMemory from "../repository/database/StockEntryRepositoryMemory";
 import TaxTableRepositoryMemory from "../repository/database/TaxTableRepositoryMemory";
 import CouponRepositoryMemory from "../repository/memory/CouponRepositoryMemory";
 import ItemRepositoryMemory from "../repository/memory/ItemRepositoryMemory";
@@ -21,5 +23,7 @@ export default class MemoryRepositoryFactory implements RepositoryFactory {
     createOrderRepository(): OrderRepository {
         return OrderRepositoryMemory.getInstance()
     }
-
+    createStockEntryRepository(): StockEntryRepository {
+        return new StockEntryRepositoryMemory()
+    }
 }

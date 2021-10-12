@@ -13,6 +13,8 @@ beforeEach(async function () {
     repositoryFactory = new DatabaseRepositoryFactory()
     const orderRepository = repositoryFactory.createOrderRepository()
     await orderRepository.clean()
+    const stockEntryRepository = repositoryFactory.createStockEntryRepository()
+    await stockEntryRepository.clean()
     zipcodeCalculator = new ZipcodeCalculatorAPIMemory()
 })
 test("Deve consultar um pedido", async function () {
@@ -20,9 +22,9 @@ test("Deve consultar um pedido", async function () {
         cpf: "987.599.380-80",
         zipcode: "11.111-11",
         items: [
-            { id: "1", quantity: 2 },
-            { id: "2", quantity: 1 },
-            { id: "3", quantity: 3 }
+            { idItem: 1, quantity: 2 },
+            { idItem: 2, quantity: 1 },
+            { idItem: 3, quantity: 3 }
         ],
         coupon: "VALE20"
     })
