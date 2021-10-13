@@ -10,26 +10,35 @@ export default class OrderRepositoryDatabase implements OrderRepository {
         this.database = database
     }
     async save(order: Order): Promise<void> {
-        const orderData = await this.database.one("insert into ccca.order (coupon_code, code, cpf, issue_date, freight, taxes, serial ) values ( $1, $2, $3, $4, $5, $6, $7) returning *", [order.coupon?.code, order.code.value, order.cpf.value, order.issueDate, order.freight, order.taxes, order.sequence ])
+        const orderParams = [ order.coupon?.code, order.code.value, order.cpf.value, order.issueDate, order.freight, order.taxes, order.sequence ]
+        const query = "insert into ccca.order (coupon_code, code, cpf, issue_date, freight, taxes, serial ) values ( $1, $2, $3, $4, $5, $6, $7) returning *"
+        const orderData = await this.database.one(query, orderParams)
+
         for(const orderItem of order.items) {
-            await this.database.one("insert into ccca.order_item(id_order, id_item, price, quantity) values($1, $2, $3, $4) returning *", [orderData.id, orderItem.id, orderItem.price, orderItem.quantity])
+            const orderItemParams = [orderData.id, orderItem.id, orderItem.price, orderItem.quantity]
+            await this.database.one("insert into ccca.order_item(id_order, id_item, price, quantity) values($1, $2, $3, $4) returning *", orderItemParams)
         }
     }
+
     async get(code: string): Promise<Order> {
         const orderData = await this.database.one("select * from ccca.order where code = $1", [code])
         const orderItemsData = await this.database.many("select * from ccca.order_item where id_order = $1", [orderData.id])
         const order = new Order(orderData.cpf, new Date(orderData.issue_date), orderData.serial)
+
         for(const orderItemData of orderItemsData) {
             order.addItem(orderItemData.id_item, parseFloat(orderItemData.price), orderItemData.quantity)
         }
+
         if(orderData.coupon_code) {
             const couponData = await this.database.one("select * from ccca.coupon where code = $1", [orderData.coupon_code] )
             const coupon = new Coupon(couponData.code, couponData.percentage, couponData.expire_date)
             order.addCoupon(coupon)
         }
+
         order.freight = parseFloat(orderData.freight)
         return order
     }
+
     async count(): Promise<number> {
         const countData = await this.database.one("select count(*)::int as count from ccca.order", [])
         return countData.count
